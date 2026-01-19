@@ -3,144 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企业微信审批-产品清单选择</title>
+    <title>产品清单选择（审批专用）</title>
     <style>
-        body {
-            font-family: "Microsoft YaHei", sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f7fa;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #1890ff;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        body { font-family: "Microsoft YaHei"; margin: 20px; background: #f5f7fa; }
+        .container { max-width: 700px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #eee; padding: 10px; text-align: center; }
+        th { background: #fafafa; }
+        .selected { background: #e6f7ff; } /* 选中行样式 */
+        #confirmBtn { 
+            width: 100%; 
+            padding: 12px; 
+            background: #1890ff; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            cursor: pointer; 
             margin-top: 20px;
         }
-        th, td {
-            border: 1px solid #e8e8e8;
-            padding: 12px;
-            text-align: center;
-        }
-        th {
-            background-color: #fafafa;
-            color: #333;
-        }
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-        .quantity-input {
-            width: 60px;
-            padding: 5px;
-            text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .btn-group {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .btn {
-            padding: 10px 20px;
-            margin: 0 5px;
-            cursor: pointer;
-            background-color: #1890ff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .btn:hover {
-            background-color: #40a9ff;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #e6e6e6;
-            border-radius: 4px;
-            min-height: 50px;
-            color: #333;
-        }
-        /* 适配企业微信内置浏览器 */
-        @media (max-width: 600px) {
-            th, td {
-                padding: 8px;
-                font-size: 14px;
-            }
-            .btn {
-                padding: 8px 15px;
-                font-size: 13px;
-            }
+        #confirmBtn:disabled { 
+            background: #ccc; 
+            cursor: not-allowed; 
         }
     </style>
+    <!-- 引入企业微信JS-SDK -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
 <body>
     <div class="container">
-        <h2>产品清单选择（审批专用）</h2>
+        <h2>请选择需要审批的产品</h2>
         <table>
             <thead>
                 <tr>
                     <th>选择</th>
                     <th>产品编号</th>
                     <th>产品名称</th>
-            </tr>
+                    <th>规格型号</th>
+                    <th>单价（元）</th>
+                </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox" data-id="PRO001" data-name="办公笔记本电脑" </td>
+                <tr onclick="selectProduct(this)">
+                    <td><input type="radio" name="product" value="PRO001|办公笔记本电脑|联想小新Pro14|5999"></td>
                     <td>PRO001</td>
                     <td>办公笔记本电脑</td>
-                    <td><input type="number" class="quantity-input" min="1" max="20" value="1"></td>
+                    <td>联想小新Pro14</td>
+                    <td>5999</td>
                 </tr>
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox" data-id="PRO002" data-name="无线鼠标" </td>
+                <tr onclick="selectProduct(this)">
+                    <td><input type="radio" name="product" value="PRO002|无线鼠标|罗技M220|89"></td>
                     <td>PRO002</td>
-                    <td>无线鼠标</td> 
-                    <td><input type="number" class="quantity-input" min="1" max="100" value="1"></td>
+                    <td>无线鼠标</td>
+                    <td>罗技M220</td>
+                    <td>89</td>
                 </tr>
-                <tr>
-                    <td><input type="checkbox" class="product-checkbox" data-id="PRO003" data-name="打印纸" </td>
+                <tr onclick="selectProduct(this)">
+                    <td><input type="radio" name="product" value="PRO003|打印纸|A4 80g|25"></td>
                     <td>PRO003</td>
                     <td>打印纸</td>
-                    <td><input type="number" class="quantity-input" min="1" max="500" value="1"></td>
+                    <td>A4 80g</td>
+                    <td>25</td>
                 </tr>
             </tbody>
         </table>
-
-        <div class="btn-group">
-            <button class="btn" id="saveBtn">保存选择</button>
-            <button class="btn" id="getBtn">获取已选</button>
-            <button class="btn" id="clearBtn">清空选择</button>
-        </div>
-
-        <div class="result" id="result"></div>
+        <button id="confirmBtn" disabled>确定选择并返回审批</button>
     </div>
 
-    <!-- 引入企业微信JS SDK -->
-    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script>
-        // **************************
-        // 第一步：初始化企业微信JS SDK
-        // **************************
-        wx.config({
-            beta: true, // 必须开启，支持企业微信特有接口
-            debug: false, // 调试时可改为true，查看SDK日志
-            appId: "ww3ba73a3096cd2a0d", // 替换为你的企业ID
-            timestamp: new Date().getTime(), // 实际需由后端生成
-            nonceStr: "randomStr", // 实际需由后端生成
-            signature: "yourSignature", // 实际需由后端生成
-            jsApiList: [
-                "invoke
+        // 1. 全局变量：存储选中的产品
+        let selectedProduct = null;
+
+        // 2. 选择产品的逻辑
+        function selectProduct(tr) {
+            // 取消其他行选中状态
+            document.querySelectorAll('tr').forEach(row => {
+                row.classList.remove('selected');
+                const radio = row.querySelector('input[name="product"]');
+                if (radio) radio.checked = false;
+            });
+            // 选中当前行
+            tr.classList.add('selected');
+            const radio = tr.querySelector('input[name="product"]');
+            radio.checked = true;
+            // 保存选中的产品数据
+            selectedProduct = radio.value;
+            // 激活确定按钮
+            document.getElementById('confirmBtn').disabled = false;
+        }
+
+        // 3. 企业微信JS-SDK初始化 + 数据回传逻辑
+        document.getElementById('confirmBtn').addEventListener('click', function() {
+            if (!selectedProduct) return;
+
+            // 初始化企业微信JS-SDK（需替换为你的企业信息）
+            wx.config({
+                beta: true, // 必须打开
+                debug: false, // 调试时可改为true
+                appId: 'ww3ba73a3096cd2a0d', // 替换：企业微信管理后台的「企业ID」
+                timestamp: new Date().getTime(), // 实际开发需后端生成，测试用当前时间
+                nonceStr: 'randomStr', // 实际开发需后端生成，测试用固定值
+                signature: 'testSignature', // 实际开发需后端生成，测试用固定值
+                jsApiList: ['invoke'] // 必须包含invoke
+            });
+
+            // 初始化成功后，回传数据到审批界面
+            wx.ready(function() {
+                // 调用企业微信审批回传接口
+                wx.invoke('invokeService', {
+                    service: 'approval',
+                    api: 'setApprovalFieldValue',
+                    data: JSON.stringify({
+                        // 回传的产品数据（审批表单会接收这个值）
+                        value: selectedProduct 
+                    })
+                }, function(res) {
+                    if (res.err_msg === 'invokeService:ok') {
+                        // 回传成功，关闭当前网页，返回审批界面
+                        wx.invoke('closeWindow', {}, function() {});
+                    } else {
+                        alert('数据回传失败：' + res.err_msg);
+                    }
+                });
+            });
+
+            // 初始化失败处理
+            wx.error(function(res) {
+                alert('JS-SDK初始化失败：' + res.err_msg);
+            });
+        });
+    </script>
+</body>
+</html>
