@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企业微信审批-产品清单</title>
+    <title>企业微信审批-产品清单选择</title>
     <style>
-        /* 页面样式，适配企业微信内置浏览器 */
         body {
             font-family: "Microsoft YaHei", sans-serif;
             margin: 0;
@@ -43,40 +42,105 @@
         tr:hover {
             background-color: #f9f9f9;
         }
-        /* 适配手机端 */
+        .quantity-input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-group {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            background-color: #1890ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #40a9ff;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #e6e6e6;
+            border-radius: 4px;
+            min-height: 50px;
+            color: #333;
+        }
+        /* 适配企业微信内置浏览器 */
         @media (max-width: 600px) {
             th, td {
                 padding: 8px;
                 font-size: 14px;
+            }
+            .btn {
+                padding: 8px 15px;
+                font-size: 13px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>产品清单（审批专用）</h2>
+        <h2>产品清单选择（审批专用）</h2>
         <table>
             <thead>
                 <tr>
+                    <th>选择</th>
                     <th>产品编号</th>
-                    <th>产品名称</th> 
-                 </tr>
+                    <th>产品名称</th>
+            </tr>
             </thead>
             <tbody>
-               <tr>
+                <tr>
+                    <td><input type="checkbox" class="product-checkbox" data-id="PRO001" data-name="办公笔记本电脑" </td>
                     <td>PRO001</td>
                     <td>办公笔记本电脑</td>
-               </tr>
+                    <td><input type="number" class="quantity-input" min="1" max="20" value="1"></td>
+                </tr>
                 <tr>
+                    <td><input type="checkbox" class="product-checkbox" data-id="PRO002" data-name="无线鼠标" </td>
                     <td>PRO002</td>
-                    <td>无线鼠标</td>
-               </tr>
+                    <td>无线鼠标</td> 
+                    <td><input type="number" class="quantity-input" min="1" max="100" value="1"></td>
+                </tr>
                 <tr>
+                    <td><input type="checkbox" class="product-checkbox" data-id="PRO003" data-name="打印纸" </td>
                     <td>PRO003</td>
                     <td>打印纸</td>
-               </tr>
+                    <td><input type="number" class="quantity-input" min="1" max="500" value="1"></td>
+                </tr>
             </tbody>
         </table>
+
+        <div class="btn-group">
+            <button class="btn" id="saveBtn">保存选择</button>
+            <button class="btn" id="getBtn">获取已选</button>
+            <button class="btn" id="clearBtn">清空选择</button>
+        </div>
+
+        <div class="result" id="result"></div>
     </div>
-</body>
-</html>
+
+    <!-- 引入企业微信JS SDK -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script>
+        // **************************
+        // 第一步：初始化企业微信JS SDK
+        // **************************
+        wx.config({
+            beta: true, // 必须开启，支持企业微信特有接口
+            debug: false, // 调试时可改为true，查看SDK日志
+            appId: "ww3ba73a3096cd2a0d", // 替换为你的企业ID
+            timestamp: new Date().getTime(), // 实际需由后端生成
+            nonceStr: "randomStr", // 实际需由后端生成
+            signature: "yourSignature", // 实际需由后端生成
+            jsApiList: [
+                "invoke
