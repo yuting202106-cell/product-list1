@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业微信审批-产品清单</title>
+    <style>
+        /* 页面样式，适配企业微信内置浏览器 */
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #1890ff;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #e8e8e8;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #fafafa;
+            color: #333;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        /* 适配手机端 */
+        @media (max-width: 600px) {
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>产品清单（审批专用）</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>产品编号</th>
+                    <th>产品名称</th> 
+                 </tr>
+            </thead>
+            <tbody>
+               <tr>
+                    <td>PRO001</td>
+                    <td>办公笔记本电脑</td>
+               </tr>
+                <tr>
+                    <td>PRO002</td>
+                    <td>无线鼠标</td>
+               </tr>
+                <tr>
+                    <td>PRO003</td>
+                    <td>打印纸</td>
+               </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
